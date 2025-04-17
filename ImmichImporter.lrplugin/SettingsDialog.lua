@@ -1,19 +1,33 @@
+require "ImmichAPI"
+
 local LrDialogs = import 'LrDialogs'
 local LrView = import 'LrView'
 local LrPrefs = import 'LrPrefs'
 
 local prefs = LrPrefs.prefsForPlugin()
 
+-- Function to test the connection
+local function testConnection()
+    local tempServerUrl = prefs.tempServerUrl or "Not set"
+    local tempApiKey = prefs.tempApiKey or "Not set"
 
-
+    local immich = ImmichAPI:new(tempServerUrl, tempApiKey)
+    immich:checkConnectivity(function(success)
+        if success then
+            LrDialogs.message("Test Connection", "Immich connection working!", "info")
+        else
+            LrDialogs.message("Test Connection", "Immich connection not working, probably due to wrong URL and/or API key.", "critical")
+        end
+    end)
+end
 
 local function showSettingsDialog()
     prefs.tempServerUrl = "Please define the Immich server URL"
-    prefs.tempApiKey= "Please define the Immich API key"
+    prefs.tempApiKey = "Please define the Immich API key"
 
     if _G.globalSettings then
         prefs.tempServerUrl = _G.globalSettings.serverUrl or "Please define the Immich server URL"
-        prefs.tempApiKey = _G.globalSettings.apiKey or  "Please define the Immich API key"
+        prefs.tempApiKey = _G.globalSettings.apiKey or "Please define the Immich API key"
     end
 
     local f = LrView.osFactory()
@@ -47,12 +61,7 @@ local function showSettingsDialog()
         f:row {
             f:push_button {
                 title = "Test Connection",
-                action = function()
-                    -- TODO - Replace this with a real API call to test the connection
-                    local tempServerUrl = prefs.tempServerUrl or "Not set"
-                    local tempApiKey = prefs.tempApiKey or "Not set"
-                    LrDialogs.message("Test Connection", "Server URL: " .. tempServerUrl .. "\nAPI Key: " .. tempApiKey, "info")
-                end,
+                action = testConnection, -- Call the separate function
             },
         },
     }

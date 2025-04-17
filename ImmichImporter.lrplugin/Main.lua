@@ -44,7 +44,6 @@ local function showDialog()
 
     if result == "ok" then
         -- TODO - Add the logic to import photos from Immich
-        -- TODO - Access the global values
         local serverUrl = _G.globalSettings and _G.globalSettings.serverUrl or "Not Set"
         local apiKey = _G.globalSettings and _G.globalSettings.apiKey or "Not Set"
         local selectedAlbumValue = prefs.selectedAlbum
