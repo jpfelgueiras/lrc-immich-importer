@@ -17,6 +17,27 @@ function ImmichAPI:new(url, apiKey)
     return o
 end
 
+
+function ImmichAPI:getAlbumAssets(albumId)
+    local path = '/albums/' .. albumId
+    local parsedResponse = ImmichAPI.doGetRequest(self, path)
+    local assets = {}
+    if parsedResponse then
+        if  parsedResponse.assets then
+            for i = 1, #parsedResponse.assets do
+                local row = parsedResponse.assets[i]
+                table.insert(assets,"/assets/"..row.id.."/original")
+            end
+        else
+            LrDialogs.message('No assets found in the response.')
+        end
+       
+        return assets
+    else
+        return nil
+    end
+end
+
 function ImmichAPI:getAlbums()
     local path = '/albums'
     local parsedResponse = ImmichAPI.doGetRequest(self, path)

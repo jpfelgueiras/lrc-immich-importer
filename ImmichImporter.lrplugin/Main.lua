@@ -8,8 +8,31 @@ local LrPrefs = import 'LrPrefs'
 local function getImmichAlbums()
     local serverUrl = _G.globalSettings and _G.globalSettings.serverUrl or "Not Set"
     local apiKey = _G.globalSettings and _G.globalSettings.apiKey or "Not Set"
+
     local immich = ImmichAPI:new(serverUrl, apiKey)
+    
     return immich:getAlbums()    
+end
+
+local function loadAlbumPhotos(selectedAlbum)
+    local serverUrl = _G.globalSettings and _G.globalSettings.serverUrl or "Not Set"
+    local apiKey = _G.globalSettings and _G.globalSettings.apiKey or "Not Set"
+
+    local immich = ImmichAPI:new(serverUrl, apiKey)
+    LrTasks.startAsyncTask(function()
+        local albumAssets = immich:getAlbumAssets(selectedAlbum)
+        if albumAssets then
+            for i = 1, #albumAssets do
+                local asset = albumAssets[i]
+                -- TODO Create a background task to download the asset
+                -- and import it into Lightroom
+                -- For now, just show a message with the asset URL
+                LrDialogs.message("Asset", "Asset"..asset, "critical")
+            end
+        else
+            LrDialogs.message("Error", "Failed to load album assets.", "critical")
+        end
+    end)
 end
 
 local prefs = LrPrefs.prefsForPlugin()
@@ -43,17 +66,7 @@ local function showDialog()
         }
 
         if result == "ok" then
-            -- TODO - Add the logic to import photos from Immich
-            local serverUrl = _G.globalSettings and _G.globalSettings.serverUrl or "Not Set"
-            local apiKey = _G.globalSettings and _G.globalSettings.apiKey or "Not Set"
-            local selectedAlbumValue = prefs.selectedAlbum
-
-            LrDialogs.message("Import!", 
-                string.format("Importing photos from Immich...\nSelected Album: %s\nServer URL: %s\nAPI Key: %s", 
-                selectedAlbumValue or "None",
-                serverUrl,
-                apiKey), 
-                "info")
+            loadAlbumPhotos(prefs.selectedAlbum)
         end
     end)
 end
