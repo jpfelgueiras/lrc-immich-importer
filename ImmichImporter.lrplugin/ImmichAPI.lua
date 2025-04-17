@@ -1,6 +1,8 @@
+
 local LrDialogs = import 'LrDialogs'
 local LrHttp = import 'LrHttp'
 local LrTasks = import 'LrTasks'
+local JSON = require "JSON"
 
 ImmichAPI = {}
 ImmichAPI.__index = ImmichAPI
@@ -15,6 +17,36 @@ function ImmichAPI:new(url, apiKey)
     return o
 end
 
+function ImmichAPI:getAlbums()
+    local path = '/albums'
+    local parsedResponse = ImmichAPI.doGetRequest(self, path)
+    local albums = {}
+    if parsedResponse then
+        for i = 1, #parsedResponse do
+            local row = parsedResponse[i]
+            table.insert(albums,
+                { title = row.albumName , value = row.id })
+        end
+        return albums
+    else
+        return nil
+    end
+end
+
+function ImmichAPI:doGetRequest(apiPath)
+
+    local response, headers = LrHttp.get(self.url .. self.apiBasePath .. apiPath, ImmichAPI.createHeaders(self))
+
+    if headers.status == 200 then
+        return JSON:decode(response)
+    else
+
+        if response ~= nil then
+            LrDialogs.message('Response body: ' .. response)
+        end
+        return nil
+    end
+end
 
 function ImmichAPI:checkConnectivity(callback)
 
