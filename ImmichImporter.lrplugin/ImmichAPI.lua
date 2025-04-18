@@ -41,7 +41,10 @@ function ImmichAPI:getAlbumAssets(albumId)
         if  parsedResponse.assets then
             for i = 1, #parsedResponse.assets do
                 local row = parsedResponse.assets[i]
-                table.insert(assets,"/assets/"..row.id.."/original")
+                table.insert(assets,{
+                    id = "/assets/"..row.id.."/original",
+                    originalFileName = row.originalFileName,
+                })
             end
         else
             LrDialogs.message('No assets found in the response.')

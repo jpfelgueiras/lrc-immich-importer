@@ -29,9 +29,9 @@ local function loadAlbumPhotos(selectedAlbum)
             -- Download all assets and save them to temporary files
             for i = 1, #albumAssets do
                 local asset = albumAssets[i]
-                local assetData = immich:downloadAsset(asset)
+                local assetData = immich:downloadAsset(asset.id)
                 if assetData then
-                    local tempFilePath = LrPathUtils.child(LrPathUtils.getStandardFilePath("temp"), "asset_" .. i .. ".jpg")
+                    local tempFilePath = LrPathUtils.child(LrPathUtils.getStandardFilePath("temp"), asset.originalFileName)
                     local file = io.open(tempFilePath, "wb")
                     if file then
                         file:write(assetData)
