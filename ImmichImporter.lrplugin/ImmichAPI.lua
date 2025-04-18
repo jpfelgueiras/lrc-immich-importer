@@ -17,6 +17,21 @@ function ImmichAPI:new(url, apiKey)
     return o
 end
 
+function ImmichAPI:downloadAsset(asset)
+    local assetUrl = self.url .. self.apiBasePath .. asset
+
+    -- Perform the HTTP GET request to download the asset
+    local response, headers = LrHttp.get(assetUrl, ImmichAPI.createHeaders(self))
+
+    if headers.status == 200 and response then
+        -- Return the response (binary data of the asset)
+        return response
+    else
+        -- Log an error message if the download fails
+        LrDialogs.message("Error", "Failed to download asset. HTTP Status: " .. tostring(headers.status), "critical")
+        return nil
+    end
+end
 
 function ImmichAPI:getAlbumAssets(albumId)
     local path = '/albums/' .. albumId
