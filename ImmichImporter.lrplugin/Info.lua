@@ -3,7 +3,7 @@ return {
     LrToolkitIdentifier = 'com.jpfelgueiras.immichimporter',
     LrPluginName = "Immich Importer",
     LrPluginInfoUrl = "https://jpfelgueiras.com",
-
+    LrInitPlugin = "Init.lua",
 
     -- Menu integration
     LrExportMenuItems = {

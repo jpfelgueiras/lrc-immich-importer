@@ -1,10 +1,4 @@
-require "ImmichAPI"
 
-local LrDialogs = import 'LrDialogs'
-local LrTasks = import 'LrTasks'
-local LrView = import 'LrView'
-local LrPrefs = import 'LrPrefs'
-local LrPathUtils = import 'LrPathUtils'
 
 local function getImmichAlbums()
     local serverUrl = _G.globalSettings and _G.globalSettings.serverUrl or "Not Set"

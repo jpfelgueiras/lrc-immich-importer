@@ -1,8 +1,4 @@
-require "ImmichAPI"
 
-local LrDialogs = import 'LrDialogs'
-local LrView = import 'LrView'
-local LrPrefs = import 'LrPrefs'
 
 local prefs = LrPrefs.prefsForPlugin()
 
@@ -18,7 +14,7 @@ local function testConnection()
         else
             LrDialogs.message("Test Connection", "Immich connection not working, probably due to wrong URL and/or API key.", "critical")
         end
-    end)
+    end)  
 end
 
 local function showSettingsDialog()

@@ -1,9 +1,3 @@
-
-local LrDialogs = import 'LrDialogs'
-local LrHttp = import 'LrHttp'
-local LrTasks = import 'LrTasks'
-local JSON = require "JSON"
-
 ImmichAPI = {}
 ImmichAPI.__index = ImmichAPI
 
